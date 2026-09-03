@@ -70,11 +70,17 @@ app.post('/api/tasks/confirm', async (req, res) => {
   if (error) return res.status(500).json({ error });
   res.json({ success: true, data });
 });
+// Only listen locally. Vercel will handle the routing when deployed!
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = 3000;
+  app.listen(PORT, () => {
+    console.log(`🚀 Amara Server running at http://localhost:${PORT}`);
+  });
+}
 
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Amara Server running at http://localhost:${PORT}`);
-});
+// Export the app for Vercel
+export default app;
+
 import { handleRecurringTaskAction } from './recurringEngine.mjs';
 
 app.post('/api/tasks/recurring-action', async (req, res) => {
